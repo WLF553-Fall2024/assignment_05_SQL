@@ -1,0 +1,31 @@
+-- What type of items are found in diet contents?
+
+SELECT DISTINCT item
+FROM diet_contents;
+
+-- What is the biggest dragon among those we tracked (total body size)?
+
+SELECT MAX(total_body_length_cm), dragon_id
+FROM deployments
+LEFT JOIN captures USING (dragon_id)
+LEFT JOIN morphometrics USING (capture_event);
+
+-- Minimum, maximum, and mean wingspan broken up by species? 
+
+SELECT MIN(wingspan_cm), AVG(wingspan_cm), MAX(wingspan_cm), species
+FROM morphometrics
+LEFT JOIN captures USING (capture_event)
+LEFT JOIN dragons USING (dragon_id)
+GROUP BY species;
+
+-- How many diet samples for each dragon species?
+
+SELECT COUNT(DISTINCT sample_id), species
+FROM diet_samples
+LEFT JOIN dragons USING (dragon_id)
+GROUP BY species;
+
+-- Who was the latest capture? 
+
+SELECT MAX(date) AS latest, dragon_id
+FROM captures;
